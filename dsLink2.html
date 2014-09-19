@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="http://127.0.0.1:6953/socket.io/socket.io.js"></script>
+</head>
+<body>
+<script>
+	var v = window.location.search.slice(1).split("&");
+	var i,a,roomId;
+	for(i in v){
+		a = v[i].split("=");
+		if(a[0]=="id"){
+			roomId = a[1]; 
+			break;
+		}
+	}
+	var socket = io.connect("http://127.0.0.1:6953");
+	socket.on("connection",function(data){
+		socket.emit("initRoom",{id:roomId});
+	});
+	socket.on("initRoom",function(data){
+		console.log(roomId);
+		var _i = 0;
+		setInterval(function(){
+			_i++;
+			socket.emit("data",{id:roomId,i:_i});
+		},1000)
+	});
+</script>
+</body>
+</html>

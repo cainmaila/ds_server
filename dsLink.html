@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="http://127.0.0.1:6953/socket.io/socket.io.js"></script>
+</head>
+<body>
+<img id="qrcode" src="def.jpg" />
+<script>
+	var roomId;
+	var socket = io.connect("127.0.0.1:6953");
+	socket.on("connection",function(data){
+		console.log(data);
+		socket.emit("initRoom",data);
+	});
+	socket.on("initRoom",function(data){
+		roomId = data.id;
+		console.log(roomId);
+		//createQRCode(roomId);
+	});
+	socket.on("data",function(data){
+		console.log(data);
+	});
+	function createQRCode(roomId_){
+		document.getElementById("qrcode").src="http://chart.apis.google.com/chart?cht=qr&chs=300x300&chl=http://dl.dropboxusercontent.com/u/19304009/ds/dsCom.html?id="+roomId;
+	}
+</script>
+</body>
+</html>
