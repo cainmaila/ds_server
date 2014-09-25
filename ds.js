@@ -19,6 +19,7 @@ io.on("connection",function(socket){
 	});
 	//斷線
 	socket.on("close",function(data){
+		socket.emit("disconnect");
 		socket.disconnect();
 	});
 	//關閉房間所有的連線，只有主控能關
