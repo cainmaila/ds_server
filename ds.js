@@ -1,4 +1,4 @@
-﻿//資料交換路由器v0.02
+﻿//資料交換路由器v0.1
 var io = require("socket.io").listen(6953);
 console.log("server start..");
 //申請連線服務
@@ -13,6 +13,12 @@ io.on("connection",function(socket){
 		socket.join(data.id);
 		socket.emit("initRoom",{id:data.id});
 	});
+	//開新房間，已在房間者都斷線
+	socket.on("openRoom",function(data){
+		disconnectRoom(data.id);
+		socket.join(data.id);
+		socket.emit("openRoom",{id:data.id});
+	});
 	//房間廣播
 	socket.on("data",function(data){
 		socket.broadcast.to(data.id).emit('data', data);
@@ -24,15 +30,25 @@ io.on("connection",function(socket){
 	});
 	//關閉房間所有的連線，只有主控能關
 	socket.on("closeRoom",function(data){
-		var clients = io.sockets.clients(data.id);
-		for ( var s in clients){
-			socket.emmit("disconnect");
-			clients[s].disconnect();
-		}
+		disconnectRoom(data.id);
 	});
 	//斷線呼叫
 	socket.on("disconnect",function(){
 		console.log("close: " +socket.id);
 	});
+	//房間重開，目前連線都斷線
+	function disconnectRoom (roomId) {
+
+		var res = []
+		, room = io.sockets.adapter.rooms[roomId]
+		, _socket;
+		if (room) {
+		    for (var id in room) {
+		    	_socket = io.sockets.adapter.nsp.connected[id];
+		    	_socket.emit("disconnect");
+		    	_socket.disconnect();
+		    }
+		}
+	}
 });
 
