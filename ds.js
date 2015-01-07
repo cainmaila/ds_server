@@ -1,5 +1,8 @@
-﻿//資料交換路由器v0.1
-var io = require("socket.io").listen(6953);
+﻿//資料交換路由器v0.2
+var Server = require('socket.io');
+var io = new Server();
+//var io = require("socket.io").listen(6953);
+io.listen(6953);
 console.log("server start..");
 //申請連線服務
 io.on("connection",function(socket){
@@ -36,9 +39,12 @@ io.on("connection",function(socket){
 	socket.on("disconnect",function(){
 		console.log("close: " +socket.id);
 	});
+	//取回房間連線數量
+	socket.on("length",function  (data) {
+		socket.emit("length",{id:data.id,length:Object.keys(io.sockets.adapter.rooms[data.id]).length});
+	})
 	//房間重開，目前連線都斷線
 	function disconnectRoom (roomId) {
-
 		var res = []
 		, room = io.sockets.adapter.rooms[roomId]
 		, _socket;

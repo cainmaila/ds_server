@@ -1,0 +1,2 @@
+"c:\Program Files\WinRAR\WinRAR.exe" A -m3 "E:\cain_tmp\Dropbox\Dropbox\work\node-webkit-v0.10.5-win-ia32\Ds.zip" -r
+start "" "E:\cain_tmp\Dropbox\Dropbox\work\node-webkit-v0.10.5-win-ia32\nw.exe" "E:\cain_tmp\Dropbox\Dropbox\work\node-webkit-v0.10.5-win-ia32\Ds.zip"
