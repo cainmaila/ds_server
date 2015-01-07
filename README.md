@@ -20,4 +20,6 @@ initRoom 進入房間
 
 close 斷線
 
+length 返回房間連線數量
+
 closeRoom 關閉房間所有的連線，只有主控能關
